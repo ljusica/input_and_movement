@@ -19,7 +19,7 @@ public class Assignment4 : ProcessingLite.GP21
     {
         char1Position.x = Width / 2;
         char1Position.y = Height / 1.5f;
-        
+
         char2Position.x = Width / 2;
         char2Position.y = Height / 3;
     }
@@ -30,25 +30,28 @@ public class Assignment4 : ProcessingLite.GP21
         Background(0);
         Circle(char1Position.x, char1Position.y, diameter);
         Circle(char2Position.x, char2Position.y, diameter);
-        input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        Vector2 moveCorrect = new Vector2(Input.GetAxis("Horizontal"), (Input.GetAxis("Vertical")));
+        moveCorrect.Normalize();
 
-        if (input.magnitude != 0)
+        if (moveCorrect.magnitude != 0)
 
         {
-            char1Position.x = char1Position.x + (speed1 * Input.GetAxis("Horizontal")) * Time.deltaTime;
-            char1Position.y = char1Position.y + (speed1 * Input.GetAxis("Vertical")) * Time.deltaTime;
+            char1Position = char1Position + speed1 * moveCorrect * Time.deltaTime;
 
             if (speed2 <= maxSpeed)
             {
                 speed2 += speed2 + acceleration;
-                char2Position.x = char2Position.x + (speed2 * Input.GetAxis("Horizontal")) * Time.deltaTime;
-                char2Position.y = char2Position.y + (speed2 * Input.GetAxis("Vertical")) * Time.deltaTime;
+                char2Position = char2Position + speed2 * moveCorrect * Time.deltaTime;
             }
 
             else
             {
-                char2Position.x = char2Position.x + (speed2 * Input.GetAxis("Horizontal")) * Time.deltaTime;
-                char2Position.y = char2Position.y + (speed2 * Input.GetAxis("Vertical")) * Time.deltaTime;
+                char2Position = char2Position + speed2 * moveCorrect * Time.deltaTime;
+
+                if (moveCorrect.magnitude == 0 && speed2 != 0)
+                {
+                    speed2--;
+                }
             }
 
         }
